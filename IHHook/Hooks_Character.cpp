@@ -316,8 +316,8 @@ namespace IHHook {
 			}
 
 			//WORKAROUND: vanilla treats SNAKE/AVATAR the same, and theres some oddness going on when they have different parts in helispace due to the mirror venom/other player instance
-			if (character.playerType == PlayerType_SNAKE && playerType == PlayerType_AVATAR 
-				|| character.playerType == PlayerType_AVATAR && playerType == PlayerType_SNAKE) {
+			if ((character.playerType == PlayerType_SNAKE && playerType == PlayerType_AVATAR) 
+				|| (character.playerType == PlayerType_AVATAR && playerType == PlayerType_SNAKE)) {
 				return true;
 			}
 			
@@ -365,7 +365,7 @@ namespace IHHook {
 			//the calls following that have the correct playerPartsType, and playerParts with needHead have the correct playerPartsType
 			if (playerType == 3 && playerPartsType == 0) {
 				spdlog::debug("LoadPlayerPartsFpkHook player type is 3 and parts is 0");
-				//return LoadPlayerPartsFpk(fileSlotIndex, playerType, playerPartsType);
+				return LoadPlayerPartsFpk(fileSlotIndex, playerType, playerPartsType);
 			}
 
 			//TODO: if I ever get a 'does file exist' check
@@ -400,7 +400,7 @@ namespace IHHook {
 			//DEBUGNOW			
 			if (playerType == PlayerType_AVATAR && playerPartsType == PlayerPartsType_NORMAL) {
 				spdlog::debug("LoadPlayerPartsPartsHook player type is 3 and parts is 0");
-				//return LoadPlayerPartsParts(fileSlotIndex, playerType, playerPartsType);
+				return LoadPlayerPartsParts(fileSlotIndex, playerType, playerPartsType);
 			}
 
 			//TODO: if I ever get a 'does file exist' check
@@ -1110,6 +1110,7 @@ namespace IHHook {
 			}
 
 			//OFF, see GOTCHA spdlog::debug("IsHeadNeededForPartsTypeHook playerPartsType:{} headNeeded:{}", playerPartsType, headNeeded);
+			spdlog::debug("IsHeadNeededForPartsTypeHook playerPartsType:{} headNeeded:{} overrideCharacterSystem:{}", playerPartsType, headNeeded,overrideCharacterSystem);
 			return headNeeded;
 		}//IsHeadNeededForPartsTypeHook
 
@@ -1135,7 +1136,7 @@ namespace IHHook {
 				headNeeded = IsHeadNeededForPartsTypeAndAvatar(playerPartsType);//tex fall back to original
 			}
 
-			spdlog::debug("IsHeadNeededForPartsTypeHook playerPartsType:{} headNeeded:{}", playerPartsType, headNeeded);
+			spdlog::debug("IsHeadNeededForPartsTypeAndAvatarHook playerPartsType:{} headNeeded:{} overrideCharacterSystem:{}", playerPartsType, headNeeded,overrideCharacterSystem);
 
 			return headNeeded;
 

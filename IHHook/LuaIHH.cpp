@@ -255,25 +255,25 @@ namespace IHHook {
 					if (lua_isnumber(L,-1))
 						missionCode = static_cast<unsigned short>(lua_tointeger(L, -1));
 					lua_pop(L, 1);
-					luaLog->info("AddPhotoAdditionalText missionCode %d\n",missionCode);
+					luaLog->info("AddPhotoAdditionalText missionCode {}",missionCode);
             
 					lua_getfield(L,-1,"photoId");
 					if (lua_isnumber(L,-1))
 						photoId = static_cast<unsigned char>(lua_tointeger(L, -1));
 					lua_pop(L, 1);
-					luaLog->info("AddPhotoAdditionalText photoId %d\n",photoId);
+					luaLog->info("AddPhotoAdditionalText photoId {}",photoId);
             
 					lua_getfield(L,-1,"photoType");
 					if (lua_isnumber(L,-1))
 						photoType = static_cast<unsigned char>(lua_tointeger(L, -1));
 					lua_pop(L, 1);
-					luaLog->info("AddPhotoAdditionalText photoType %d\n",photoType);
+					luaLog->info("AddPhotoAdditionalText photoType {}",photoType);
             
 					lua_getfield(L,-1,"targetTypeLangId");
 					if (lua_isstring(L,-1))
 						targetTypeLangIdStr = lua_tostring(L, -1);
 					lua_pop(L, 1);
-					luaLog->info("AddPhotoAdditionalText targetTypeLangIdStr %s\n",targetTypeLangIdStr);
+					luaLog->info("AddPhotoAdditionalText targetTypeLangIdStr {}",targetTypeLangIdStr);
             
 					if (missionCode==0xFFFF) continue;
 					if (photoId==0xFF) continue;
@@ -282,6 +282,8 @@ namespace IHHook {
 				}
 			}
 			lua_pop( L, 1 );
+			
+			return 1;
 		}
 
 		//tex TODO better module name, will likely break out into IHH<module name> as the amount of functions expands, but would have to change 'if IHH' checks in IH
