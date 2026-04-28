@@ -50,7 +50,7 @@ typedef void (__fastcall LoadBuddyHorseCommonFPKFunc)(longlong param_1, ulonglon
 typedef ulonglong * (__fastcall LoadBuddyWalkerGearArmFpkFunc)(ulonglong param_1, ulonglong * fileSlotIndex, ulonglong param_3, ulonglong param_4);
 typedef ulonglong * (__fastcall LoadBuddyWalkerGearHeadFpkFunc)(ulonglong param_1, ulonglong * fileSlotIndex, ulonglong param_3, ulonglong param_4);
 typedef ulonglong * (__fastcall LoadBuddyWalkerGearWeaponFpkFunc)(ulonglong param_1, ulonglong * fileSlotIndex, ulonglong param_3, ulonglong param_4);
-typedef int * (__fastcall LoadDefaultFpksFuncFunc)(void * param_1, int * param_2, ulonglong * param_3, uint param_4);
+typedef int * (__fastcall FoxBlockLoadFunc)(void * param_1, int * param_2, ulonglong * param_3, uint param_4);
 typedef char (__fastcall PreparePlayerVehicleInSortieFunc)(longlong param_1);
 typedef char (__fastcall PreparePlayerVehicleInGameFunc)(longlong param_1, ulonglong param_2);
 typedef longlong (__fastcall LoadDefaultFpkPtrFuncFunc)(longlong param_1, uint param_2);
@@ -180,10 +180,17 @@ typedef int (__fastcall luaopen_mathFunc)(lua_State * L);
 typedef int (__fastcall luaopen_debugFunc)(lua_State * L);
 typedef int (__fastcall luaopen_packageFunc)(lua_State * L);
 typedef void (__fastcall luaL_openlibsFunc)(lua_State * L);
+typedef double (__fastcall FoxBlockProcessFunc)(void* Block, void* TaskContext, void* BlockProcessState);
 typedef ChangeLocationMenuParameter* (__thiscall GetChangeLocationMenuParameterByLocationIdFunc)(MotherBaseMissionCommonData* This, unsigned short locationCode);
 typedef ChangeLocationMenuParameter* (__thiscall GetMbFreeChangeLocationMenuParameterFunc)(MotherBaseMissionCommonData* This);
+typedef unsigned long long (__thiscall GetPhotoAdditionalTextLangIdFunc)(MotherBaseMissionCommonData* self, unsigned long long* __return_storage_ptr__, unsigned short missionCode, unsigned char photoId, unsigned char photoType);
+/*typedef bool (__thiscall IsUseAreaIconFunc)(void* MbDvcMapCallbackIconImpl, uint param_1, uint param_2, bool param_3, bool param_4, bool param_5, bool param_6);
 typedef uint (__cdecl ConvertRadioTypeToSpeechLabelFunc)(ubyte radioType);
+typedef ushort (__thiscall CallWithRadioTypeFunc)(void* RadioSpeechHandlerImpl, uint param_1, ubyte param_2, ushort radioType);
+typedef void(__thiscall StateRadioFunc)(void* ActionControllerImpl, uint param_1, ubyte StateProc);
 typedef ubyte (__cdecl ConvertSpeechLabelToRadioTypeFunc)(uint speechLabel);
+typedef bool (__cdecl IsRainingFunc)(void* Soldier2, uint param_2);
+typedef uint(__cdecl ConvertToVoiceTypeFunc)(uint voiceTypeS32);*/
 
 //tex the (extern of the) function pointers
 extern GetStrCodeWithLengthFunc* GetStrCodeWithLength;
@@ -222,7 +229,7 @@ extern LoadBuddyHorseCommonFPKFunc* LoadBuddyHorseCommonFPK;
 extern LoadBuddyWalkerGearArmFpkFunc* LoadBuddyWalkerGearArmFpk;
 extern LoadBuddyWalkerGearHeadFpkFunc* LoadBuddyWalkerGearHeadFpk;
 extern LoadBuddyWalkerGearWeaponFpkFunc* LoadBuddyWalkerGearWeaponFpk;
-extern LoadDefaultFpksFuncFunc* LoadDefaultFpksFunc;
+extern FoxBlockLoadFunc* FoxBlockLoad;
 extern PreparePlayerVehicleInSortieFunc* PreparePlayerVehicleInSortie;
 extern PreparePlayerVehicleInGameFunc* PreparePlayerVehicleInGame;
 extern LoadDefaultFpkPtrFuncFunc* LoadDefaultFpkPtrFunc;
@@ -352,7 +359,14 @@ extern luaopen_mathFunc* luaopen_math;
 extern luaopen_debugFunc* luaopen_debug;
 extern luaopen_packageFunc* luaopen_package;
 extern luaL_openlibsFunc* luaL_openlibs;
+extern FoxBlockProcessFunc* FoxBlockProcess;
 extern GetChangeLocationMenuParameterByLocationIdFunc* GetChangeLocationMenuParameterByLocationId;
 extern GetMbFreeChangeLocationMenuParameterFunc* GetMbFreeChangeLocationMenuParameter;
+extern GetPhotoAdditionalTextLangIdFunc* GetPhotoAdditionalTextLangId;
+/*extern IsUseAreaIconFunc* IsUseAreaIcon;
 extern ConvertRadioTypeToSpeechLabelFunc* ConvertRadioTypeToSpeechLabel;
 extern ConvertSpeechLabelToRadioTypeFunc* ConvertSpeechLabelToRadioType;
+extern CallWithRadioTypeFunc* CallWithRadioType;
+extern StateRadioFunc* StateRadio;
+extern IsRainingFunc* IsRaining;
+extern ConvertToVoiceTypeFunc* ConvertToVoiceType;*/

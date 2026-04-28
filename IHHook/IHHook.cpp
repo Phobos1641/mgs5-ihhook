@@ -304,7 +304,7 @@ namespace IHHook {
 
 			auto tend = std::chrono::high_resolution_clock::now();
 			auto durationShort = std::chrono::duration_cast<std::chrono::microseconds>(tend - tstart).count();
-			spdlog::debug("IHHook::CreateHooks total time(microseconds): {}µs", durationShort);
+			spdlog::debug("IHHook::CreateHooks total time(microseconds): {}ï¿½s", durationShort);
 		}//if doHooks
 
 		PipeServer::StartPipeServer();
@@ -802,6 +802,8 @@ namespace IHHook {
 			std::string valueStr = line.substr(found + 1);
 			varName = trim(varName);
 			valueStr = trim(valueStr);
+
+			spdlog::info("config varName={},valueStr={}", varName, valueStr);
 
 			//tex ugh
 			if (varName == "debugMode") {

@@ -361,8 +361,9 @@ namespace IHHook {
 			CREATE_HOOK(LoadBuddyWalkerGearArmFpk)
 			CREATE_HOOK(LoadBuddyWalkerGearHeadFpk)
 			CREATE_HOOK(LoadBuddyWalkerGearWeaponFpk)
-			CREATE_HOOK(LoadBuddyDogCommonFPK)
-			CREATE_HOOK(LoadBuddyHorseCommonFPK)
+			//these crash the game
+			//CREATE_HOOK(LoadBuddyDogCommonFPK)
+			//CREATE_HOOK(LoadBuddyHorseCommonFPK)
 			//CREATE_HOOK(LoadBuddyWalkerGearCommonFPK)
 
 			ENABLEHOOK(LoadBuddyMainFile)
@@ -370,8 +371,8 @@ namespace IHHook {
 			ENABLEHOOK(LoadBuddyWalkerGearArmFpk)
 			ENABLEHOOK(LoadBuddyWalkerGearHeadFpk)
 			ENABLEHOOK(LoadBuddyWalkerGearWeaponFpk)
-			ENABLEHOOK(LoadBuddyDogCommonFPK)
-			ENABLEHOOK(LoadBuddyHorseCommonFPK)
+			//ENABLEHOOK(LoadBuddyDogCommonFPK)
+			//ENABLEHOOK(LoadBuddyHorseCommonFPK)
 			//ENABLEHOOK(LoadBuddyWalkerGearCommonFPK)
 		}//CreateHooks
 

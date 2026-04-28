@@ -66,3 +66,30 @@ static const enum TppLocationId : ushort {
 	mafr = 20,
 	mtbs = 50,
 };
+struct PhotoInfoString {
+	unsigned short MissionCode;
+	byte PhotoId;
+	byte PhotoType;
+	const char* TargetType;
+};
+
+struct SideOpsInfo {
+	byte iconPos[0x8];
+	uint questId;
+	byte gmp;
+	byte paddingA[0x3];
+	ushort locationId;
+	byte index;
+	byte flags;
+	byte radius;
+	byte clusterId;
+	byte pltnId;
+	byte paddingB;
+};
+struct MbDvcSideOpsCallbackImpl {
+	byte paddingA[600];
+	SideOpsInfo sideOpInfo[192];
+	ubyte questCount;
+	byte triple[8][3];
+	byte paddingB[287];
+};

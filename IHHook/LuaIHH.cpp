@@ -15,11 +15,13 @@
 #include "Hooks_Lua.h"// l_FoxLua_Init, l_FoxLua_OnUpdate
 #include "IHMenu.h" // MenuMessage, messagesIn
 #include "Hooks_FOV.h" // l_SetCamHook, l_UpdateCamHook
+#include "Hooks_TPP.h"
 
 namespace IHHook {
 	extern std::shared_ptr<spdlog::logger> luaLog;
 
 	extern std::map<int, long long> locationLangIds;
+	extern std::map<int, PhotoInfoString> photoInfoAddon;
 	extern bool isCode102;
 
 	namespace LuaIHH {
@@ -231,14 +233,55 @@ namespace IHHook {
 		}//l_TestCallToIHHook
 		// < IHH module funcs
 
-		static int l_EnableCode102(lua_State* L)
-		{
-			if (lua_isboolean(L, -1))
-			{
-				isCode102 = lua_toboolean(L, -1);
-				return 1;
+		static int l_AddPhotoAdditionalText(lua_State* L) {
+			spdlog::trace(__func__);
+			luaLog->info("l_UpdatePhotoText");
+
+			if (!lua_istable(L, -1)) {
+				luaLog->error("expected table");
+				return 0;
 			}
-			return 0;
+    
+			for (lua_pushnil(L); lua_next(L, -2); lua_pop(L, 1)) 
+			{
+				if ( lua_istable( L, -1) ) 
+				{
+					unsigned short missionCode = 0xFFFF;
+					unsigned char photoId = 0xFF;
+					unsigned char photoType = 0xFF;
+					const char* targetTypeLangIdStr = "";
+            
+					lua_getfield(L,-1,"missionCode");
+					if (lua_isnumber(L,-1))
+						missionCode = static_cast<unsigned short>(lua_tointeger(L, -1));
+					lua_pop(L, 1);
+					luaLog->info("AddPhotoAdditionalText missionCode %d\n",missionCode);
+            
+					lua_getfield(L,-1,"photoId");
+					if (lua_isnumber(L,-1))
+						photoId = static_cast<unsigned char>(lua_tointeger(L, -1));
+					lua_pop(L, 1);
+					luaLog->info("AddPhotoAdditionalText photoId %d\n",photoId);
+            
+					lua_getfield(L,-1,"photoType");
+					if (lua_isnumber(L,-1))
+						photoType = static_cast<unsigned char>(lua_tointeger(L, -1));
+					lua_pop(L, 1);
+					luaLog->info("AddPhotoAdditionalText photoType %d\n",photoType);
+            
+					lua_getfield(L,-1,"targetTypeLangId");
+					if (lua_isstring(L,-1))
+						targetTypeLangIdStr = lua_tostring(L, -1);
+					lua_pop(L, 1);
+					luaLog->info("AddPhotoAdditionalText targetTypeLangIdStr %s\n",targetTypeLangIdStr);
+            
+					if (missionCode==0xFFFF) continue;
+					if (photoId==0xFF) continue;
+					if (photoType==0xFF) continue;
+					Hooks_TPP::AddPhotoAdditionalText(missionCode,photoId,photoType,targetTypeLangIdStr);
+				}
+			}
+			lua_pop( L, 1 );
 		}
 
 		//tex TODO better module name, will likely break out into IHH<module name> as the amount of functions expands, but would have to change 'if IHH' checks in IH
@@ -264,7 +307,7 @@ namespace IHHook {
 				{ "SetCamHook", Hooks_FOV::l_SetCamHook },//TODO: move to own lib
 				{ "UpdateCamHook", Hooks_FOV::l_UpdateCamHook },
 				{ "TestCallToIHHook", l_TestCallToIHHook},
-				{ "EnableCode102", l_EnableCode102},
+				{ "AddPhotoAdditionalText", l_AddPhotoAdditionalText},
 				{ NULL, NULL }
 			};
 			luaI_openlib(L, "IHH", ihh_funcs, 0);

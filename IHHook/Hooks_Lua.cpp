@@ -271,9 +271,11 @@ namespace IHHook {
 			luaLog = spdlog::basic_logger_st("lua", luaLogName);//tex st/single threaded since we want to preserver order, it's better performance, and we wont be logging from different threads
 			if (config.logTime) {
 				luaLog->set_pattern("|%H:%M:%S:%e|%l: %v");
+				spdlog::set_pattern("|%H:%M:%S:%e|%l: %v");
 			}
 			else {
 				luaLog->set_pattern("%l: %v");
+				spdlog::set_pattern("%l: %v");
 			}
 
 			if (config.debugMode) {
@@ -315,7 +317,6 @@ namespace IHHook {
 				CREATE_HOOK(lua_pcall)
 				CREATE_HOOK(lua_cpcall)
 				CREATE_HOOK(l_StubbedOut)
-				CREATE_HOOK(LoadDefaultFpksFunc)
 
 				ENABLEHOOK(luaL_openlibs)
 				ENABLEHOOK(lua_newstate)
@@ -327,7 +328,11 @@ namespace IHHook {
 				ENABLEHOOK(lua_pcall)
 				ENABLEHOOK(lua_cpcall)
 				//ENABLEHOOK(l_StubbedOut)//DEBUGNOW enabling after lua is init in openlibs see l_StubbedOutHook
-				ENABLEHOOK(LoadDefaultFpksFunc)
+
+				CREATE_HOOK(FoxBlockLoad)
+				ENABLEHOOK(FoxBlockLoad)
+				//CREATE_HOOK(FoxBlockProcess)
+				//ENABLEHOOK(FoxBlockProcess)
 			}//if name##Addr != NULL
 		}//CreateHooks
 
@@ -532,14 +537,39 @@ namespace IHHook {
 		}
 
 		// used for debugging, see docs/issue_7.md
+		std::map<void*, uint32_t> processCount{};
 		std::map<void*, std::string> blockNames{};
-		int* LoadDefaultFpksFuncHook(void* thisPtr, int* errorCode, uint64_t* pathID, uint32_t count) {
+		double FoxBlockProcessHook(void* Block, void* TaskContext, void* BlockProcessState) {
+			//this keeps crashing
+			DWORD tid = GetCurrentThreadId();
+			if (processCount.find(Block)!=processCount.end()) {
+				processCount[Block]++;
+			}
+			else {
+				processCount[Block] = 0;
+			}
+			if (processCount[Block] % 500 == 0) {
+				auto blockName = blockNames[Block];
+				uint32_t mem1 = *(int*)((char*)Block + 0x60);
+				int32_t mem2 = *(int*)((char*)Block + 0x18);
+				int32_t mem3 = *(int*)((char*)Block + 0x40);
+				int32_t mem4 = *(int*)((char*)Block + 0x10);
+				uint32_t mem5 = *(int*)((char*)Block + 0x148);
+				spdlog::info("tid {}, process {} ({}), mem {} {} {} {} {}", tid, blockName, Block, mem1, mem2, mem3, mem4, mem5);
+			}
+
+			//        if ((uint)((*(int *)(param_1 + 0x60) - *(int *)(param_1 + 0x18)) + *(int *)(param_1 + 0x40) +
+			//                   *(int *)(param_1 + 0x10)) <= *(uint *)(param_1 + 0x148)) {
+
+			return FoxBlockProcess(Block, TaskContext, BlockProcessState);
+		}
+		int* FoxBlockLoadHook(void* thisPtr, int* errorCode, uint64_t* pathID, uint32_t count) {
 			DWORD tid = GetCurrentThreadId();
 			auto pp = pathID;
 			auto blockName = blockNames[thisPtr];
 			if (pathDict.empty()) {
 				spdlog::info("tid 1 {}, block {} ({}), loading {:x} ({:d})", tid, blockName, thisPtr, *pp, count);
-				return LoadDefaultFpksFunc(thisPtr, errorCode, pathID, count);
+				return FoxBlockLoad(thisPtr, errorCode, pathID, count);
 			}
 
 			for (int i = 0; i < count; i++) {
@@ -552,7 +582,7 @@ namespace IHHook {
 				}
 				pp++;
 			}
-			auto q = LoadDefaultFpksFunc(thisPtr, errorCode, pathID, count);
+			auto q = FoxBlockLoad(thisPtr, errorCode, pathID, count);
 			return q;
 		}
 	}//namespace Hooks_Lua

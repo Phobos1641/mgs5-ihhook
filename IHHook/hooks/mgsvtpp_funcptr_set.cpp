@@ -48,7 +48,7 @@ namespace IHHook {
 		LoadBuddyWalkerGearArmFpk = (LoadBuddyWalkerGearArmFpkFunc*)addressSet["LoadBuddyWalkerGearArmFpk"];
 		LoadBuddyWalkerGearHeadFpk = (LoadBuddyWalkerGearHeadFpkFunc*)addressSet["LoadBuddyWalkerGearHeadFpk"];
 		LoadBuddyWalkerGearWeaponFpk = (LoadBuddyWalkerGearWeaponFpkFunc*)addressSet["LoadBuddyWalkerGearWeaponFpk"];
-		LoadDefaultFpksFunc = (LoadDefaultFpksFuncFunc*)addressSet["LoadDefaultFpksFunc"];
+		FoxBlockLoad = (FoxBlockLoadFunc*)addressSet["FoxBlockLoad"];
 		PreparePlayerVehicleInSortie = (PreparePlayerVehicleInSortieFunc*)addressSet["PreparePlayerVehicleInSortie"];
 		PreparePlayerVehicleInGame = (PreparePlayerVehicleInGameFunc*)addressSet["PreparePlayerVehicleInGame"];
 		LoadDefaultFpkPtrFunc = (LoadDefaultFpkPtrFuncFunc*)addressSet["LoadDefaultFpkPtrFunc"];
@@ -178,10 +178,17 @@ namespace IHHook {
 		luaopen_debug = (luaopen_debugFunc*)addressSet["luaopen_debug"];
 		luaopen_package = (luaopen_packageFunc*)addressSet["luaopen_package"];
 		luaL_openlibs = (luaL_openlibsFunc*)addressSet["luaL_openlibs"];
+		FoxBlockProcess = (FoxBlockProcessFunc*)addressSet["FoxBlockProcess"];
 		GetChangeLocationMenuParameterByLocationId = (GetChangeLocationMenuParameterByLocationIdFunc*)addressSet["GetChangeLocationMenuParameterByLocationId"];
 		GetMbFreeChangeLocationMenuParameter = (GetMbFreeChangeLocationMenuParameterFunc*)addressSet["GetMbFreeChangeLocationMenuParameter"];
+		GetPhotoAdditionalTextLangId = (GetPhotoAdditionalTextLangIdFunc*)addressSet["GetPhotoAdditionalTextLangId"];
+		/*IsUseAreaIcon = (IsUseAreaIconFunc*)addressSet["IsUseAreaIcon"];
 		ConvertRadioTypeToSpeechLabel = (ConvertRadioTypeToSpeechLabelFunc*)addressSet["ConvertRadioTypeToSpeechLabel"];
 		ConvertSpeechLabelToRadioType = (ConvertSpeechLabelToRadioTypeFunc*)addressSet["ConvertSpeechLabelToRadioType"];
+		CallWithRadioType = (CallWithRadioTypeFunc*)addressSet["CallWithRadioType"];
+		StateRadio = (StateRadioFunc*)addressSet["StateRadio"];
+		IsRaining = (IsRainingFunc*)addressSet["IsRaining"];
+		ConvertToVoiceType = (ConvertToVoiceTypeFunc*)addressSet["ConvertToVoiceType"];*/
 	}//SetFuncPtrs
 
 }//namespace IHHook

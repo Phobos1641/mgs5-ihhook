@@ -23,8 +23,8 @@ namespace IHHook {
 		static const int MAX_SNAKE_FACEID = 3; //aka MAX_HORN_LEVEL
 		static const int MAX_SNAKE_FACES = 2;//NORMAL/BANDANA
 		struct Character {
-			uint playerType = 255;
-			uint playerPartsType = 255;
+			uint playerType = PlayerType_MAX;
+			uint playerPartsType = PlayerPartsType_MAX;
 			bool useHead = false;
 			bool useBionicHand = false;
 			bool useCamo = false;
@@ -222,8 +222,8 @@ namespace IHHook {
 		//lua SetBionicHandFv2Path(int playerHandType, string fv2Path)
 		int l_SetBionicHandFv2Path(lua_State* L) {
 			uint playerHandType = (uint)lua_tointeger(L, -2);
-			if (playerHandType == 0) {
-				//spdlog::warn("l_SetBionicHandFv2Path cannot override playerHandType 0/NONE");
+			if (playerHandType == PlayerHandType_NONE) {
+				spdlog::warn("l_SetBionicHandFv2Path cannot override playerHandType 0/NONE");
 				//DEBUGNOW return 0;
 			}
 
@@ -306,7 +306,8 @@ namespace IHHook {
 		}//l_SetAvatarHornFpkPath
 
 		bool IsPlayerTypeValid(uint playerType) {
-			if (character.playerType == 255) {
+			spdlog::debug("IsPlayerTypeValid playerType:{}, character.playerType:{}", playerType, character.playerType);
+			if (character.playerType == PlayerType_MAX) {
 				return true;
 			}
 
@@ -315,7 +316,8 @@ namespace IHHook {
 			}
 
 			//WORKAROUND: vanilla treats SNAKE/AVATAR the same, and theres some oddness going on when they have different parts in helispace due to the mirror venom/other player instance
-			if (character.playerType == 0 && playerType == 3 || character.playerType == 3 && playerType == 0) {
+			if (character.playerType == PlayerType_SNAKE && playerType == PlayerType_AVATAR 
+				|| character.playerType == PlayerType_AVATAR && playerType == PlayerType_SNAKE) {
 				return true;
 			}
 			
@@ -323,7 +325,7 @@ namespace IHHook {
 		}//IsPlayerTypeValid
 
 		bool IsPlayerPartsTypeValid(uint playerPartsType) {
-			if (character.playerPartsType == 255) {
+			if (character.playerPartsType == PlayerType_MAX) {
 				return true;
 			}
 
@@ -341,16 +343,19 @@ namespace IHHook {
 				//DEBUGNOW ASSUMPTION: this being the first extended function were hooking
 				//tex turn it off entirely if it doesnt match
 				//DEBUGNOW the funcs not gated by overrideCharacterSystem
+				spdlog::debug("LoadPlayerPartsFpkHook overrideCharacterSystem:{}, character.playerPartsPartsPath:{}", overrideCharacterSystem,character.playerPartsFpkPath);
 				overrideCharacterSystem = false;
 			}
 
 			//tex fall back to original function
 			if (!overrideCharacterSystem) {
+				spdlog::debug("LoadPlayerPartsFpkHook overrideCharacterSystem is false, use vanilla");
 				return LoadPlayerPartsFpk(fileSlotIndex, playerType, playerPartsType);
 			}
 
 			//tex HOSPITAL, AVATAR_EDIT_MAN too much going on with this to be safe
 			if (playerPartsType == 3 || playerPartsType == 14) {
+				spdlog::debug("LoadPlayerPartsFpkHook is 3 or 14, use vanilla");
 				return LoadPlayerPartsFpk(fileSlotIndex, playerType, playerPartsType);
 			}
 
@@ -359,7 +364,8 @@ namespace IHHook {
 			//which is neither here not there, but for !needHead (talking about underlying property rather than IHH implementation) playerParts it always calls with playerPartsType 0 reguardless of actual playerPartsType. 
 			//the calls following that have the correct playerPartsType, and playerParts with needHead have the correct playerPartsType
 			if (playerType == 3 && playerPartsType == 0) {
-				return LoadPlayerPartsFpk(fileSlotIndex, playerType, playerPartsType);
+				spdlog::debug("LoadPlayerPartsFpkHook player type is 3 and parts is 0");
+				//return LoadPlayerPartsFpk(fileSlotIndex, playerType, playerPartsType);
 			}
 
 			//TODO: if I ever get a 'does file exist' check
@@ -374,22 +380,27 @@ namespace IHHook {
 			
 			if (!IsPlayerTypeValid(playerType) || character.playerPartsPartsPath == "") {
 				//tex as above, but to catch odd cases (LoadPlayerPartsParts is called on mission load without LoadPlayerPartsFpk)
+				spdlog::debug("LoadPlayerPartsPartsHook overrideCharacterSystem:{}, character.playerPartsPartsPath:{}", overrideCharacterSystem,character.playerPartsPartsPath);
 				overrideCharacterSystem = false;
 			}
 
 			//tex fall back to original function
 			if (!overrideCharacterSystem) {
+				spdlog::debug("LoadPlayerPartsPartsHook overrideCharacterSystem is false, use vanilla");
 				return LoadPlayerPartsParts(fileSlotIndex, playerType, playerPartsType);			
 			}
 
 			//tex HOSPITAL, AVATAR_EDIT_MAN too much going on with this to be safe
-			if (playerPartsType == 3 || playerPartsType == 14) {
+			if (playerPartsType == PlayerPartsType_HOSPITAL 
+				|| playerPartsType == PlayerPartsType_AVATAR_EDIT_MAN) {
+				spdlog::debug("LoadPlayerPartsPartsHook is 3 or 14, use vanilla");
 				return LoadPlayerPartsParts(fileSlotIndex, playerType, playerPartsType);
 			}
 
 			//DEBUGNOW			
-			if (playerType == 3 && playerPartsType == 0) {
-				return LoadPlayerPartsParts(fileSlotIndex, playerType, playerPartsType);
+			if (playerType == PlayerType_AVATAR && playerPartsType == PlayerPartsType_NORMAL) {
+				spdlog::debug("LoadPlayerPartsPartsHook player type is 3 and parts is 0");
+				//return LoadPlayerPartsParts(fileSlotIndex, playerType, playerPartsType);
 			}
 
 			//TODO: if I ever get a 'does file exist' check
@@ -402,47 +413,47 @@ namespace IHHook {
 		//UNUSED parts/fpk alternate > 
 		//[playerType][playerPartsType]=PathCodeExt64.
 		std::map<uint, std::map<uint, std::string>> playerPartsFpk = {
-			{0,{//SNAKE
+			{PlayerType_SNAKE,{//SNAKE
 					//manual tests
 					//{4,"/Assets/tpp/pack/player/parts/plparts_ninja.fpk"},//4/MGS1 > ninja test swap
 					//{24,"/Assets/tpp/pack/player/parts/plparts_ocelot.fpk"}//24/non existant partsTypeEnum test
 				},//MGS snake
 			},
-			{1,{//DD_MALE
+			{PlayerType_DD_MALE,{//DD_MALE
 					//{4,"/Assets/tpp/pack/player/parts/plparts_ninja.fpk"},
 					//{24,"/Assets/tpp/pack/player/parts/plparts_ninja.fpk"}
 				},//MGS snake
 			},
-			{2,{}},//DD_FEMALE
-			{3,{//AVATAR
+			{PlayerType_DD_FEMALE,{}},//DD_FEMALE
+			{PlayerType_AVATAR,{//AVATAR
 					//{4,"/Assets/tpp/pack/player/parts/plparts_ninja.fpk"},
 					//{24,"/Assets/tpp/pack/player/parts/plparts_ninja.fpk"}
 				},//MGS snake
 			},
-			{4,{}},//LIQUID
-			{5,{}},//OCELOT
-			{6,{}},//QUIET
+			{PlayerType_LIQUID,{}},//LIQUID
+			{PlayerType_OCELOT,{}},//OCELOT
+			{PlayerType_QUIET,{}},//QUIET
 		};
 		std::map<uint, std::map<uint, std::string>> playerPartsParts = {
-			{0,{//SNAKE
+			{PlayerType_SNAKE,{//SNAKE
 					//{4,"/Assets/tpp/parts/chara/nin/nin0_main0_def_v00.parts"},//MGS1 > ninja test swap
 					//{284,"/Assets/tpp/parts/chara/ooc/ooc0_main1_def_v00.parts"}//28/non existant partsTypeEnum test
 				},//MGS snake
 			},
-			{1,{//DD_MALE
+			{PlayerType_DD_MALE,{//DD_MALE
 					//{4,"/Assets/tpp/parts/chara/nin/nin0_main0_def_v00.parts"},
 					//{28,"/Assets/tpp/parts/chara/nin/nin0_main0_def_v00.parts"}
 				},//MGS snake
 			},
-			{2,{}},//DD_FEMALE
-			{3,{//AVAT
+			{PlayerType_DD_FEMALE,{}},//DD_FEMALE
+			{PlayerType_DD_FEMALE,{//AVAT
 					//{4,"/Assets/tpp/parts/chara/nin/nin0_main0_def_v00.parts"},
 					//{28,"/Assets/tpp/parts/chara/nin/nin0_main0_def_v00.parts"}
 				},//MGS snake
 			},
-			{4,{}},//LIQUID
-			{5,{}},//OCELOT
-			{6,{}},//QUIET
+			{PlayerType_LIQUID,{}},//LIQUID
+			{PlayerType_OCELOT,{}},//OCELOT
+			{PlayerType_QUIET,{}},//QUIET
 		};
 
 		//input: uint playerType, uint playerPartsType, string fpkPath
@@ -623,22 +634,24 @@ namespace IHHook {
 		}
 
 		bool UseVanillaPlayerCamo(uint playerType, uint playerPartsType, uint playerCamoType) {
-			if (playerCamoType == 0xff) {
+			if (playerCamoType == PlayerCamoType_MAX) {
 				return false;
 			}
-			if ((playerType == 0) || (playerType == 3)) {
-				if ((0x14 < playerPartsType - 2) && (playerPartsType < 0x1a)) {
+			if (playerType == PlayerType_SNAKE
+				|| playerType == PlayerType_AVATAR) {
+				if (PlayerPartsType_SWIMWEAR <= playerPartsType 
+					&& playerPartsType <= PlayerPartsType_SWIMWEAR_H) {
 					return true;
 				}
-				if (playerPartsType == 7) {
+				if (playerPartsType == PlayerPartsType_NAKED) {
 					return true;
 				}
 			}
 			else {
-				if (playerType == 1) {
+				if (playerType == PlayerType_DD_MALE) {
 					return true;
 				}
-				if (playerType == 2) {
+				if (playerType == PlayerType_DD_FEMALE) {
 					return true;
 				}
 			}
@@ -653,11 +666,12 @@ namespace IHHook {
 			}
 
 			//tex HOSPITAL, AVATAR_EDIT_MAN too much going on with this to be safe
-			if (playerPartsType == 3 || playerPartsType == 14) {
+			if (playerPartsType == PlayerPartsType_HOSPITAL 
+				|| playerPartsType == PlayerPartsType_AVATAR_EDIT_MAN) {
 				return LoadPlayerCamoFpk(fileSlotIndex, playerType, playerPartsType, playerCamoType);
 			}
 
-			if (playerCamoType == 255) {//tex I guess 255 is NONE/not set.
+			if (playerCamoType == PlayerCamoType_MAX) {//tex I guess 255 is NONE/not set.
 				LoadFile(fileSlotIndex, 0);
 				return fileSlotIndex;
 			}
@@ -685,11 +699,12 @@ namespace IHHook {
 			}
 
 			//tex HOSPITAL, AVATAR_EDIT_MAN too much going on with this to be safe
-			if (playerPartsType == 3 || playerPartsType == 14) {
+			if (playerPartsType == PlayerPartsType_HOSPITAL 
+				|| playerPartsType == PlayerPartsType_AVATAR_EDIT_MAN) {
 				return LoadPlayerCamoFv2(fileSlotIndex, playerType, playerPartsType, playerCamoType);
 			}
 
-			if (playerCamoType == 255) {//tex I guess 255 is NONE/not set.
+			if (playerCamoType == PlayerCamoType_MAX) {//tex I guess 255 is NONE/not set.
 				LoadFile(fileSlotIndex, 0);
 				return fileSlotIndex;
 			}
@@ -743,54 +758,56 @@ namespace IHHook {
 		//TODO: there's also facialhelispace to deal with before I'm happy with extending this
 		ulonglong* LoadPlayerFacialMotionFpkHook(ulonglong* fileSlotIndex, uint playerType){
 			spdlog::debug("LoadPlayerFacialMotionFpkHook playerType:{}", playerType);
-			if (playerType == 1) {//DD_MALE
-				LoadFile(fileSlotIndex, 0x522bba0fe696843e);// /Assets/tpp/pack/player/motion/player2_facial_dd_male.fpk
+			
+			long long filePath64 = 0x0;
+			switch (PlayerType(playerType))
+			{
+			case PlayerType_DD_MALE:
+				filePath64 = 0x522bba0fe696843e;	//	/Assets/tpp/pack/player/motion/player2_facial_dd_male.fpk
+				break;
+			case PlayerType_DD_FEMALE:
+				filePath64 = 0x5228819af53ce132;	//	/Assets/tpp/pack/player/motion/player2_facial_dd_female.fpk
+				break;
+			case PlayerType_OCELOT:
+				filePath64 = 0x522ad6eb108b656a;	//	/Assets/tpp/pack/player/motion/player2_facial_ocelot.fpk
+				break;
+			case PlayerType_QUIET:
+				filePath64 = 0x522ad26ea9839391;	//	/Assets/tpp/pack/player/motion/player2_facial_quiet.fpk
+				break;
+			default:
+				filePath64 = 0x522a1da4adfd5137;	//	SNAKE,AVATAR (default vanilla), LIQUID
+				break;
 			}
-			else {
-				if (playerType == 2) {//DD_FEMALE
-					LoadFile(fileSlotIndex, 0x5228819af53ce132);// /Assets/tpp/pack/player/motion/player2_facial_dd_female.fpk
-				}
-				else {
-					if (playerType == 5) {//OCELOT
-						LoadFile(fileSlotIndex, 0x522ad6eb108b656a);// /Assets/tpp/pack/player/motion/player2_facial_ocelot.fpk
-					}
-					else {
-						if (playerType == 6) {//QUIET
-							LoadFile(fileSlotIndex, 0x522ad26ea9839391);// /Assets/tpp/pack/player/motion/player2_facial_quiet.fpk
-						}
-						else {//SNAKE,AVATAR (default vanilla), LIQUID
-							LoadFile(fileSlotIndex, 0x522a1da4adfd5137);// /Assets/tpp/pack/player/motion/player2_facial_snake.fpk
-						}
-					}
-				}
-			}
+			LoadFile(fileSlotIndex, filePath64);
+			
 			return fileSlotIndex;
 		}//LoadPlayerFacialMotionFpkHook
 
 		//TODO: extend. just vanilla at the moment
 		ulonglong* LoadPlayerFacialMotionMtarHook(ulonglong* fileSlotIndex, int playerType) {
 			spdlog::debug("LoadPlayerFacialMotionMtarHook playerType:{}", playerType);
-			if (playerType == 1) {
-				LoadFile(fileSlotIndex, 0x67026b0d3dfd05e2);// /Assets/tpp/motion/mtar/player2/player2_ddm_facial.mtar
+			
+			long long filePath64 = 0x0;	//	/Assets/tpp/motion/mtar/player2/TppPlayer2Facial.mtar
+			switch (PlayerType(playerType))
+			{
+			case PlayerType_DD_MALE:
+				filePath64 = 0x67026b0d3dfd05e2;	//	/Assets/tpp/motion/mtar/player2/player2_ddm_facial.mtar
+				break;
+			case PlayerType_DD_FEMALE:
+				filePath64 = 0x670245b34a1d710c;	//	/Assets/tpp/motion/mtar/player2/player2_ddf_facial.mtar
+				break;
+			case PlayerType_OCELOT:
+				filePath64 = 0x6703e118275df4f2;	//	/Assets/tpp/motion/mtar/player2/player2_ocelot_facial.mtar
+				break;
+			case PlayerType_QUIET:
+				filePath64 = 0x6701511616076078;	//	/Assets/tpp/motion/mtar/player2/player2_quiet_facial.mtar
+				break;
+			default:
+				filePath64 = 0x67028b3526a03df4;	//	/Assets/tpp/motion/mtar/player2/TppPlayer2Facial.mtar
+				break;
 			}
-			else {
-				if (playerType == 2) {
-					LoadFile(fileSlotIndex, 0x670245b34a1d710c);// /Assets/tpp/motion/mtar/player2/player2_ddf_facial.mtar
-				}
-				else {
-					if (playerType == 5) {
-						LoadFile(fileSlotIndex, 0x6703e118275df4f2);// /Assets/tpp/motion/mtar/player2/player2_ocelot_facial.mtar
-					}
-					else {
-						if (playerType == 6) {
-							LoadFile(fileSlotIndex, 0x6701511616076078);// /Assets/tpp/motion/mtar/player2/player2_quiet_facial.mtar
-						}
-						else {
-							LoadFile(fileSlotIndex, 0x67028b3526a03df4);// /Assets/tpp/motion/mtar/player2/TppPlayer2Facial.mtar
-						}
-					}
-				}
-			}
+			LoadFile(fileSlotIndex, filePath64);
+			
 			return fileSlotIndex;
 		}//LoadPlayerFacialMotionMtarHook
 
@@ -824,23 +841,23 @@ namespace IHHook {
 			//SNAKE,AVATAR
 			if (playerType == 0 || playerType == 3) {
 				switch (playerPartsType) {
-				case 0://NORMAL
-				case 1://NORMAL_SCARF
-				case 2://SNEAKING_SUIT
-				case 7://NAKED
-				case 8://SNEAKING_SUIT_TPP
-				case 9://BATTLEDRESS
-				case 10://PARASITE
-				case 11://LEATHER
-				case 12://GOLD
-				case 13://SILVER
-				case 15://MGS3
-				case 16://MGS3_NAKED
-				case 17://MGS3_SNEAKING
-				case 18://MGS3_TUXEDO
-				case 23://SWIMWEAR
-				case 24://SWIMWEAR_G
-				case 25://SWIMWEAR_H
+				case PlayerPartsType_NORMAL://NORMAL
+				case PlayerPartsType_NORMAL_SCARF://NORMAL_SCARF
+				case PlayerPartsType_SNEAKING_SUIT://SNEAKING_SUIT
+				case PlayerPartsType_NAKED://NAKED
+				case PlayerPartsType_SNEAKING_SUIT_TPP://SNEAKING_SUIT_TPP
+				case PlayerPartsType_BATTLEDRESS://BATTLEDRESS
+				case PlayerPartsType_PARASITE://PARASITE
+				case PlayerPartsType_LEATHER://LEATHER
+				case PlayerPartsType_GOLD://GOLD
+				case PlayerPartsType_SILVER://SILVER
+				case PlayerPartsType_MGS3://MGS3
+				case PlayerPartsType_MGS3_NAKED://MGS3_NAKED
+				case PlayerPartsType_MGS3_SNEAKING://MGS3_SNEAKING
+				case PlayerPartsType_MGS3_TUXEDO://MGS3_TUXEDO
+				case PlayerPartsType_SWIMWEAR://SWIMWEAR
+				case PlayerPartsType_SWIMWEAR_G://SWIMWEAR_G
+				case PlayerPartsType_SWIMWEAR_H://SWIMWEAR_H
 					return true;
 				}
 			}
@@ -869,9 +886,9 @@ namespace IHHook {
 					//tex WORKAROUND: while turning hand off for partstypes that usually have them works, (ex playerPartsType NORMAL > playerPartsInfo MGS1)
 					//setting a partsType to one that has no hand also sets playerHandType to 0 (ex playerPartsType MGS1 > playerPartsInfo NORMAL)
 					//so there must be some other player it defines hand/not hand per playerType , if not right where the change to playerHandType then likely called there
-					if (playerHandType == 0) {
+					if (playerHandType == PlayerHandType_NONE) {
 						if (overrideCharacterSystem) {
-							playerHandType = 1;//tex just default to NORMAL
+							playerHandType = PlayerHandType_NORMAL;//tex just default to NORMAL
 						}
 					}
 					filePath = bionicHandFpkPaths[playerHandType];
@@ -895,9 +912,9 @@ namespace IHHook {
 			if (useBionicHand) {
 				std::string filePath = character.bionicHandFv2Path;
 				if (filePath == "") {
-					if (playerHandType == 0) {
+					if (playerHandType == PlayerHandType_NONE) {
 						if (overrideCharacterSystem) {
-							playerHandType = 1;
+							playerHandType = PlayerHandType_NORMAL;
 						}
 					}
 					filePath = bionicHandFv2Paths[playerHandType];
@@ -1177,19 +1194,19 @@ namespace IHHook {
 		//ZIP: Gold/Silver head fix
 		std::string snakeFaceFpksGoldSilver[]{
 			//Gold
-			"/Assets/tpp/pack/player/fova/plfova_sna9_face2_v00.fpk",
-			"/Assets/tpp/pack/player/fova/plfova_sna9_face0_v00.fpk",
+			"/Assets/tpp/pack/player/fova/plfova_sna9_face0_v00.fpk",//no 'dana
+			"/Assets/tpp/pack/player/fova/plfova_sna9_face2_v00.fpk",//with 'dana
 			//Silver
-			"/Assets/tpp/pack/player/fova/plfova_sna9_face3_v00.fpk",
-			"/Assets/tpp/pack/player/fova/plfova_sna9_face1_v00.fpk",
+			"/Assets/tpp/pack/player/fova/plfova_sna9_face1_v00.fpk",//no 'dana
+			"/Assets/tpp/pack/player/fova/plfova_sna9_face3_v00.fpk",//with 'dana
 		};
 		std::string snakeFaceFv2sGoldSilver[]{
 			//Gold
-			"/Assets/tpp/fova/chara/sna/sna9_face2_v00.fv2",
-			"/Assets/tpp/fova/chara/sna/sna9_face0_v00.fv2",
+			"/Assets/tpp/fova/chara/sna/sna9_face0_v00.fv2",//no 'dana
+			"/Assets/tpp/fova/chara/sna/sna9_face2_v00.fv2",//with 'dana
 			//Silver
-			"/Assets/tpp/fova/chara/sna/sna9_face3_v00.fv2",
-			"/Assets/tpp/fova/chara/sna/sna9_face1_v00.fv2",
+			"/Assets/tpp/fova/chara/sna/sna9_face1_v00.fv2",//no 'dana
+			"/Assets/tpp/fova/chara/sna/sna9_face3_v00.fv2",//with 'dana
 		};
 
 		//tex broken out from LoadPlayerSnakeFace
@@ -1197,27 +1214,27 @@ namespace IHHook {
 		//REF UNUSED
 		bool UsePlayerSnakeFaceVanilla(uint playerType, uint playerPartsType) {
 			switch (playerPartsType) {
-			case 0://NORMAL
-			case 1://NORMAL_SCARF
-			case 2://SNEAKING_SUIT
-			case 7://NAKED
-			case 8://SNEAKING_SUIT_TPP
-			case 9://BATTLEDRESS
-			case 11://LEATHER
-			case 12://GOLD
-			case 13://SILVER
-			case 14://AVATAR_EDIT_MAN
-			case 15://MGS3
-			case 16://MGS3_NAKED
-			case 17://MGS3_SNEAKING
-			case 18://MGS3_TUXEDO
-			case 19://EVA_CLOSE
-			case 20://EVA_OPEN
-			case 21://BOSS_CLOSE
-			case 22://BOSS_OPEN
-			case 23://SWIMWEAR
-			case 24://SWIMWEAR_G
-			case 25://SWIMWEAR_H
+			case PlayerPartsType_NORMAL://NORMAL
+			case PlayerPartsType_NORMAL_SCARF://NORMAL_SCARF
+			case PlayerPartsType_SNEAKING_SUIT://SNEAKING_SUIT
+			case PlayerPartsType_NAKED://NAKED
+			case PlayerPartsType_SNEAKING_SUIT_TPP://SNEAKING_SUIT_TPP
+			case PlayerPartsType_BATTLEDRESS://BATTLEDRESS
+			case PlayerPartsType_LEATHER://LEATHER
+			case PlayerPartsType_GOLD://GOLD
+			case PlayerPartsType_SILVER://SILVER
+			case PlayerPartsType_AVATAR_EDIT_MAN://AVATAR_EDIT_MAN
+			case PlayerPartsType_MGS3://MGS3
+			case PlayerPartsType_MGS3_NAKED://MGS3_NAKED
+			case PlayerPartsType_MGS3_SNEAKING://MGS3_SNEAKING
+			case PlayerPartsType_MGS3_TUXEDO://MGS3_TUXEDO
+			case PlayerPartsType_EVA_CLOSE://EVA_CLOSE
+			case PlayerPartsType_EVA_OPEN://EVA_OPEN
+			case PlayerPartsType_BOSS_CLOSE://BOSS_CLOSE
+			case PlayerPartsType_BOSS_OPEN://BOSS_OPEN
+			case PlayerPartsType_SWIMWEAR://SWIMWEAR
+			case PlayerPartsType_SWIMWEAR_G://SWIMWEAR_G
+			case PlayerPartsType_SWIMWEAR_H://SWIMWEAR_H
 				return true;
 			}
 			return false;
@@ -1228,7 +1245,7 @@ namespace IHHook {
 		ulonglong* LoadPlayerSnakeFaceFpkHook(ulonglong* fileSlotIndex, uint playerType, uint playerPartsType, uint hornLevel, char playerFaceEquipId) {
 			spdlog::debug("LoadPlayerSnakeFaceFpkHook playerPartsType:{} headNeeded:{}", playerPartsType, character.useHead);
 
-			if (playerType != 0) {
+			if (playerType != PlayerPartsType_NORMAL) {
 				LoadFile(fileSlotIndex, 0);
 				return fileSlotIndex;
 			}
@@ -1244,9 +1261,13 @@ namespace IHHook {
 				//tex .. but what face is used is independant from overrideCharacterSystem
 				std::string filePath = character.snakeFaceFpkPath;
 				if (filePath == "") {
-					bool isBandana = playerFaceEquipId == 1 || playerFaceEquipId == 2;
-					if (playerPartsType == 12) filePath = (isBandana ? snakeFaceFpksGoldSilver[1] : snakeFaceFpksGoldSilver[2] ); //Gold
-					else if (playerPartsType == 13) filePath = (isBandana ? snakeFaceFpksGoldSilver[3] : snakeFaceFpksGoldSilver[4] ); //Silver
+					bool isBandana = playerFaceEquipId == PlayerFaceEquip_BANDANA || playerFaceEquipId == PlayerFaceEquip_MUGEN_BANDANA;
+					if (playerPartsType == PlayerPartsType_GOLD) {
+						filePath = !isBandana ? snakeFaceFpksGoldSilver[0] : snakeFaceFpksGoldSilver[1]; //Gold
+					}
+					else if (playerPartsType == PlayerPartsType_SILVER) {
+						filePath = !isBandana ? snakeFaceFpksGoldSilver[2] : snakeFaceFpksGoldSilver[3]; //Silver
+					}
 					else {
 						if (isBandana) {
 							hornLevel = hornLevel + MAX_SNAKE_FACEID;//tex not really right descriptive wise, but we've only got two 'heads', normal/bandana (* 3 horn levels)
@@ -1278,9 +1299,13 @@ namespace IHHook {
 			if (useHead) {
 				std::string filePath = character.snakeFaceFv2Path;
 				if (filePath == "") {
-					bool isBandana = playerFaceEquipId == 1 || playerFaceEquipId == 2;
-					if (playerPartsType == 12) filePath = (isBandana ? snakeFaceFv2sGoldSilver[1] : snakeFaceFv2sGoldSilver[2]); //Gold
-					else if (playerPartsType == 13) filePath = (isBandana ? snakeFaceFv2sGoldSilver[3] : snakeFaceFv2sGoldSilver[4]); //Silver
+					bool isBandana = playerFaceEquipId == PlayerFaceEquip_BANDANA || playerFaceEquipId == PlayerFaceEquip_MUGEN_BANDANA;
+					if (playerPartsType == PlayerPartsType_GOLD) {
+						filePath = !isBandana ? snakeFaceFv2sGoldSilver[0] : snakeFaceFv2sGoldSilver[1]; //Gold
+					}
+					else if (playerPartsType == PlayerPartsType_SILVER) {
+						filePath = !isBandana ? snakeFaceFv2sGoldSilver[2] : snakeFaceFv2sGoldSilver[3]; //Silver
+					}
 					else {
 						if (isBandana) {
 							hornLevel = hornLevel + MAX_SNAKE_FACEID;

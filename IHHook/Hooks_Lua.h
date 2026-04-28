@@ -13,6 +13,7 @@ namespace IHHook {
 
 		extern lua_State* luaState;
 		std::map<uint64_t, std::string> readPathCodeDictionary(const std::string& filename);
-		int* LoadDefaultFpksFuncHook(void* thisPtr, int* errorCode, uint64_t* pathID, uint32_t count);
+		double FoxBlockProcessHook(void* Block, void* TaskContext, void* BlockProcessState);
+		int* FoxBlockLoadHook(void* thisPtr, int* errorCode, uint64_t* pathID, uint32_t count);
 	}//namespace Hooks_Lua
 }//namespace IHHook

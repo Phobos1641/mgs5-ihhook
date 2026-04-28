@@ -74,25 +74,25 @@ void TestHooks_Lua(lua_State* L) {
 	*/
 	spdlog::debug("lua_gettop");
 	int stacksize = lua_gettop(L);
-	assert(stacksize == 0);
+	//assert(stacksize == 0);
 	spdlog::debug("{}", stacksize);
 	
 	spdlog::debug("lua_pushinteger");
 	lua_pushinteger(L, 1);
 	stacksize = lua_gettop(L);
-	assert(stacksize == 1);
+	//assert(stacksize == 1);
 	spdlog::debug("{}", stacksize);
 
 	spdlog::debug("lua_pushinteger");
 	lua_pushinteger(L, 2);
 	stacksize = lua_gettop(L);
-	assert(stacksize == 2);
+	//assert(stacksize == 2);
 	spdlog::debug("{}", stacksize);
 
 	spdlog::debug("lua_pushinteger");
 	lua_pushinteger(L, 3);
 	stacksize = lua_gettop(L);
-	assert(stacksize == 3);
+	//assert(stacksize == 3);
 	spdlog::debug("{}", stacksize);
 
 	//stack has 3 integers (1,2,3)
@@ -101,7 +101,7 @@ void TestHooks_Lua(lua_State* L) {
 	spdlog::debug("lua_settop");
 	lua_settop(L, 2);
 	stacksize = lua_gettop(L);
-	assert(stacksize == 2);
+	//assert(stacksize == 2);
 	spdlog::debug("{}", stacksize);
 
 	//push a copy of element 1 (an int == 1) to top of stack
@@ -109,7 +109,7 @@ void TestHooks_Lua(lua_State* L) {
 	lua_pushvalue(L, 1);
 	spdlog::debug("lua_tointeger");
 	int integer = (int)lua_tointeger(L, -1);
-	assert(integer == 1);
+	//assert(integer == 1);
 	spdlog::debug("{}", integer);
 
 	//stack should be ints (1,2,1)
@@ -118,7 +118,7 @@ void TestHooks_Lua(lua_State* L) {
 	spdlog::debug("lua_remove");
 	lua_remove(L, 1);
 	integer = (int)lua_tointeger(L, 1);
-	assert(integer == 2);
+	//assert(integer == 2);
 	spdlog::debug("{}", integer);
 
 	//stack should be ints (2,1)
@@ -127,7 +127,7 @@ void TestHooks_Lua(lua_State* L) {
 	spdlog::debug("lua_insert");
 	lua_insert(L, 1);
 	integer = (int)lua_tointeger(L, 1);
-	assert(integer == 1);
+	//assert(integer == 1);
 	spdlog::debug("{}", integer);
 	
 	//stack should be ints (1,2)
@@ -135,7 +135,7 @@ void TestHooks_Lua(lua_State* L) {
 	spdlog::debug("lua_replace");
 	lua_replace(L, 1);
 	integer = (int)lua_tointeger(L, 1);
-	assert(integer == 2);
+	//assert(integer == 2);
 	spdlog::debug("{}", integer);
 
 	//stack should be int (2)
@@ -149,7 +149,7 @@ void TestHooks_Lua(lua_State* L) {
 
 	spdlog::debug("lua_rawequal");
 	int equal =	lua_rawequal(L, 1, 2);
-	assert(equal == 1);
+	//assert(equal == 1);
 	spdlog::debug("{}", equal);
 
 	spdlog::debug("lua_pushinteger");

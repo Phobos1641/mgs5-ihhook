@@ -44,7 +44,7 @@ LoadBuddyHorseCommonFPKFunc* LoadBuddyHorseCommonFPK;
 LoadBuddyWalkerGearArmFpkFunc* LoadBuddyWalkerGearArmFpk;
 LoadBuddyWalkerGearHeadFpkFunc* LoadBuddyWalkerGearHeadFpk;
 LoadBuddyWalkerGearWeaponFpkFunc* LoadBuddyWalkerGearWeaponFpk;
-LoadDefaultFpksFuncFunc* LoadDefaultFpksFunc;
+FoxBlockLoadFunc* FoxBlockLoad;
 PreparePlayerVehicleInSortieFunc* PreparePlayerVehicleInSortie;
 PreparePlayerVehicleInGameFunc* PreparePlayerVehicleInGame;
 LoadDefaultFpkPtrFuncFunc* LoadDefaultFpkPtrFunc;
@@ -175,7 +175,14 @@ luaopen_debugFunc* luaopen_debug;
 luaopen_packageFunc* luaopen_package;
 luaL_openlibsFunc* luaL_openlibs;
 
+FoxBlockProcessFunc* FoxBlockProcess;
 GetChangeLocationMenuParameterByLocationIdFunc* GetChangeLocationMenuParameterByLocationId;
 GetMbFreeChangeLocationMenuParameterFunc* GetMbFreeChangeLocationMenuParameter;
+GetPhotoAdditionalTextLangIdFunc* GetPhotoAdditionalTextLangId;
+/*IsUseAreaIconFunc* IsUseAreaIcon;
 ConvertRadioTypeToSpeechLabelFunc* ConvertRadioTypeToSpeechLabel;
 ConvertSpeechLabelToRadioTypeFunc* ConvertSpeechLabelToRadioType;
+CallWithRadioTypeFunc* CallWithRadioType;
+StateRadioFunc* StateRadio;
+IsRainingFunc* IsRaining;
+ConvertToVoiceTypeFunc* ConvertToVoiceType;*/

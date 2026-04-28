@@ -349,3 +349,9 @@ healthchecksdb
 MigrationBackup/
 makebite/GameDir/dinput8.dll
 makebite/Readme.txt
+
+# Rider
+.idea/
+
+# MakeBite
+*.mgsv

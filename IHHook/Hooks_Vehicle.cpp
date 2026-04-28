@@ -296,7 +296,7 @@ namespace IHHook {
 
 			//ZIP: Load vehicle FPK and camos fpks
 			int outArray[4];
-			LoadDefaultFpksFunc(loadPtrFunc, outArray, fileIndex, (uint)numOfCamos);
+			FoxBlockLoad(loadPtrFunc, outArray, fileIndex, (uint)numOfCamos);
 
 			int *puVar2 = *(int**)(param_1 + 0x58);
 			*(int*)(param_1 + 0x30) = *puVar2;
