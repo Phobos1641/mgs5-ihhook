@@ -354,7 +354,8 @@ namespace IHHook {
 			}
 
 			//tex HOSPITAL, AVATAR_EDIT_MAN too much going on with this to be safe
-			if (playerPartsType == 3 || playerPartsType == 14) {
+			if (playerPartsType == PlayerPartsType_HOSPITAL 
+				|| playerPartsType == PlayerPartsType_AVATAR_EDIT_MAN) {
 				spdlog::debug("LoadPlayerPartsFpkHook is 3 or 14, use vanilla");
 				return LoadPlayerPartsFpk(fileSlotIndex, playerType, playerPartsType);
 			}
@@ -363,7 +364,7 @@ namespace IHHook {
 			//logging exec flow noticed that loading in to ACC there's an extra call to loadplayer for AVATAR only (before the expected calls to both player instance 0, and 1/AVATAR)
 			//which is neither here not there, but for !needHead (talking about underlying property rather than IHH implementation) playerParts it always calls with playerPartsType 0 reguardless of actual playerPartsType. 
 			//the calls following that have the correct playerPartsType, and playerParts with needHead have the correct playerPartsType
-			if (playerType == 3 && playerPartsType == 0) {
+			if (playerType == PlayerType_AVATAR && playerPartsType == PlayerPartsType_NORMAL) {
 				spdlog::debug("LoadPlayerPartsFpkHook player type is 3 and parts is 0");
 				return LoadPlayerPartsFpk(fileSlotIndex, playerType, playerPartsType);
 			}
