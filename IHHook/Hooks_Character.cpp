@@ -335,9 +335,12 @@ namespace IHHook {
 
 			return false;
 		}//IsPlayerPartsTypeValid
+		
+		bool isPlayerPartsFpkForAvatarRequested=false;
 
 		uint64_t* LoadPlayerPartsFpkHook(uint64_t* fileSlotIndex, uint playerType, uint playerPartsType) {
 			spdlog::debug("LoadPlayerPartsFpkHook playerType:{}, playerPartsType:{}", playerType, playerPartsType);
+			isPlayerPartsFpkForAvatarRequested=false;
 
 			if (!IsPlayerTypeValid(playerType) || character.playerPartsFpkPath == "") {
 				//DEBUGNOW ASSUMPTION: this being the first extended function were hooking
@@ -366,7 +369,12 @@ namespace IHHook {
 			//the calls following that have the correct playerPartsType, and playerParts with needHead have the correct playerPartsType
 			if (playerType == PlayerType_AVATAR && playerPartsType == PlayerPartsType_NORMAL) {
 				spdlog::debug("LoadPlayerPartsFpkHook player type is 3 and parts is 0");
-				return LoadPlayerPartsFpk(fileSlotIndex, playerType, playerPartsType);
+				spdlog::debug("LoadPlayerPartsFpkHook isPlayerPartsFpkForAvatarRequested:{}",isPlayerPartsFpkForAvatarRequested);
+				if (!isPlayerPartsFpkForAvatarRequested)
+				{
+					isPlayerPartsFpkForAvatarRequested=true;
+					return LoadPlayerPartsFpk(fileSlotIndex, playerType, playerPartsType);
+				}
 			}
 
 			//TODO: if I ever get a 'does file exist' check
@@ -401,7 +409,12 @@ namespace IHHook {
 			//DEBUGNOW			
 			if (playerType == PlayerType_AVATAR && playerPartsType == PlayerPartsType_NORMAL) {
 				spdlog::debug("LoadPlayerPartsPartsHook player type is 3 and parts is 0");
-				return LoadPlayerPartsParts(fileSlotIndex, playerType, playerPartsType);
+				spdlog::debug("LoadPlayerPartsPartsHook isPlayerPartsFpkForAvatarRequested:{}",isPlayerPartsFpkForAvatarRequested);
+				if (isPlayerPartsFpkForAvatarRequested) {
+					spdlog::debug("LoadPlayerPartsPartsHook character.playerType:{} playerType:{} character.playerPartsType:{}",character.playerType,playerType);
+					isPlayerPartsFpkForAvatarRequested=false;
+					return LoadPlayerPartsParts(fileSlotIndex, playerType, playerPartsType);
+				}
 			}
 
 			//TODO: if I ever get a 'does file exist' check
@@ -1111,7 +1124,7 @@ namespace IHHook {
 			}
 
 			//OFF, see GOTCHA spdlog::debug("IsHeadNeededForPartsTypeHook playerPartsType:{} headNeeded:{}", playerPartsType, headNeeded);
-			spdlog::debug("IsHeadNeededForPartsTypeHook playerPartsType:{} headNeeded:{} overrideCharacterSystem:{}", playerPartsType, headNeeded,overrideCharacterSystem);
+			//spdlog::debug("IsHeadNeededForPartsTypeHook playerPartsType:{} headNeeded:{} overrideCharacterSystem:{}", playerPartsType, headNeeded,overrideCharacterSystem);
 			return headNeeded;
 		}//IsHeadNeededForPartsTypeHook
 
@@ -1124,7 +1137,8 @@ namespace IHHook {
 			}*/
 
 			//ZIP: Validate player parts type
-			if (!IsPlayerPartsTypeValid(playerPartsType)) {
+			if (!IsPlayerPartsTypeValid(playerPartsType) || isPlayerPartsFpkForAvatarRequested) {
+				if (character.playerType==PlayerType_SNAKE&&character.playerPartsType==PlayerPartsType_NORMAL)
 				return IsHeadNeededForPartsTypeAndAvatar(playerPartsType);
 			}
 
