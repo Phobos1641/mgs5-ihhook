@@ -1,18 +1,17 @@
 # IHHook
 Version r19 - 2026-04-29 (see github for full changes)  
-FoxString hook.  
-Fork by caplag, with contributions by ZIP and Half Way Lambda.
-Bunch of character, buddy, vehicle change hooks.  
-ihhook_config.lua (next to ihhook/dinput8 dll) - allows some startup settings of ihhook to be set.  
-FNV Hash logging.  
-Ghidra scripts to export addresses, func defs, and a refactor and reduction of required steps to get hooks running.  
+Forked by caplag, contributions by ZIP and Half Way Lambda.
+Player appearance override for Snake/Normal fixed (very sloppy, but works)
+Added a few of unknown321's block loading trace functions
+Side ops in custom locations can now be entered from the side ops list (markers still don't work properly)
+Logging fixes
 
 For MGSV version 1.15 (in title screen), 1.0.15.3 in exe  
 For Infinite Heaven r263  
 
 Previously bundled with Infinite Heaven, IHHook has been split into a seperate install and nexus page to isolate feedback and issues.
 
-IHHook source: https://github.com/TinManTex/IHHook
+IHHook source: https://github.com/kapuragu/IHHook
 IHHook mod: https://www.nexusmods.com/metalgearsolidvtpp/mods/1226
 Infinite Heaven mod: https://www.nexusmods.com/metalgearsolidvtpp/mods/45
 
