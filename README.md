@@ -1,6 +1,7 @@
 # IHHook
 Version r19 - 2026-04-29 (see github for full changes)  
 FoxString hook.  
+Fork by caplag, with contributions by ZIP and Half Way Lambda.
 Bunch of character, buddy, vehicle change hooks.  
 ihhook_config.lua (next to ihhook/dinput8 dll) - allows some startup settings of ihhook to be set.  
 FNV Hash logging.  
