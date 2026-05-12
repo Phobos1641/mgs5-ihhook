@@ -19,7 +19,7 @@ namespace IHHook {
 		//{"FoxBlockDeactivate", 0x14314a000},
 		//{"FoxGenerateUniqueName", 0x1400e0210},
 		//{"FoxBlock", 0x143145960},
-		{"FoxBlockLoad", 0x143151e80},
+		{"FoxBlockLoad", 0x143151e80},//int * fox::Block::Load(void *thisPtr,int *errorCode,ulonglong *pathID,uint param_4)
 		//{"BlockMemoryAllocTail", 0x1400dbb30},
 		//{"BlockMemoryAllocHeap", 0x143261bf0},
 		//{"GetCurrentBlockMemory", 0x14328e410},

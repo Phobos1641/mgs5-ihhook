@@ -6,14 +6,54 @@
 // USING_CODE - using the default lapi code implementation instead of hooking
 namespace IHHook {
 	std::map<std::string, std::string> mgsvtpp_patterns{
-		{"StrCode64", "48 89 6C 24 ? 56 48 83 EC 20 80 3C ? 00"},
+			
+		{"FoxBlockProcess", "48 8b c4 4c 89 40 18 55 56 57 41 54 41 55 41 56 41 57 48 8d 68 98 48 81 ec 30 01 00 00"},
+		
+		{"FoxBlockLoad", "48 89 e0 57 41 54 41 55 41 56 41 57 48 83 ec 40 48 c7 80 c8 ff ff ff fe ff ff ff 48 89 58 08"},
+		
+		{"GetStrCodeWithLength", "48 89 6C 24 ? 56 48 83 EC 20 80 3C ? 00"},
+		{"GetStrCode32", "48 83 ca ff 48 ff c2 80 3c 11 00 75 f7 e9 ? ? ? ?"},
+		
+		{"PathCode64Ext", "48 89 5c 24 08 48 89 6c 24 10 48 89 74 24 18 57 48 83 ec 20 ba 2f 00 00 00 48"},
 		{"FNVHash32", "56 48 81 EC 30 01 00 00 48 89 CE"},
+		
 		{"GetFreeRoamLangId", "0F B7 C2 83 F8 0A 74 ? 83 F8 14 74 ? 83 F8 32"},
+		
 		{"UpdateFOVLerp", "4C 8B DC 49 89 5B ? 55 56 57 41 54 41 57 49 8D AB ? ? ? ?"},
+		
 		//{"UnkSomePrintFunction", ""},//WARNING: UnkSomePrintFunction: Instruction at 142ef2c00 is not adjacent to previous (expected 142ef2c3d)
 		//{"l_StubbedOut", ""},//WARNING: l_StubbedOut: Instruction at 14024a8e3 is not adjacent to previous (expected 14024a8f0)
 		//{"nullsub_2", ""},//WARNING: nullsub_2: Instruction at 1409c8f93 is not adjacent to previous (expected 1409c8fa0)
 		{"LoadFile", "53 48 83 EC 20 49 89 D1 49 89 D2"},
+		{"LoadFileSub", "48 89 5c 24 08 57 48 83 ec 20 80 3d ? ? ? ? ? 48 89 d3 48 ? ? ? ? 48"},
+		{"Path_Copy", "53 48 83 ec 20 48 8b 02 48 89 cb 48 89 01 48 8b 0a 48 8d ? ? ? ? ?"},
+		{"GetEmptyPath", "48 83 ec 38 48 c7 44 24 20 fe ff ff ff 8b ? ? ? ? ? a8 01 ? ? 83 c8 01 89 ? ? ? ? ? ? c0 48 89 ? ? ? ? ? 48 8d 0d"},
+		
+		//LoadPlayerPartsFpk
+		//LoadPlayerSnakeFaceFv2
+		
+		//LoadAvatarOgreHornFpk
+		//LoadAvatarOgreHornFv2
+		
+		//LoadBuddyMainFile
+		//LoadBuddyQuietWeaponFpk
+		//LoadBuddyWalkerGearWeaponFpk
+		
+		//PreparePlayerVehicleInSortie
+		//PreparePlayerVehicleInGame
+		
+		//LoadDefaultFpkPtrFunc
+		
+		//LoadAllVehicleCamoFpks
+		//CreateInPlace
+		
+		//BuddyCommandGetNameLangId
+		//BuddyCommandGetDescriptionLangId
+		
+		//GetChangeLocationMenuParameterByLocationId
+		//GetMbFreeChangeLocationMenuParameter
+		{"GetPhotoAdditionalTextLangId", "48 89 5c 24 08 48 89 7c 24 ? 55 48 8d 6c 24 ? 48 81 ec ? 01 00 00"},
+		
 		{"lua_newstate", "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 20 48 89 D7 4C 89 C5"},
 		{"lua_close", "48 89 5C 24 ? 57 48 83 EC 20 48 8B 59 ? 48 8B 9B ? ? ? ?"},
 		{"lua_newthread", "53 48 83 EC 20 48 8B 51 ? 48 89 CB 48 8B 42 ?"},
