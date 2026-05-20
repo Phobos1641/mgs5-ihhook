@@ -46,10 +46,12 @@ namespace IHHook {
 		return b ? "true" : "false";
 	}
 	std::string ImVec2ToLuaStr(ImVec2 imVec2) {
-		return "{" + std::to_string(imVec2.x) + "," + std::to_string(imVec2.y) + "}";//DEBUGNOW decimal format depend on locale?
+		return "{" + std::to_string(imVec2.x) + "," + std::to_string(imVec2.y) + "}";
+		//DEBUGNOW decimal format depend on locale?
 	}
 	std::string ImVec4ToLuaStr(ImVec4 imVec4) {
-		return "{" + std::to_string(imVec4.x) + "," + std::to_string(imVec4.y) + "," + std::to_string(imVec4.z) + "," + std::to_string(imVec4.w) + "}";//DEBUGNOW decimal format depend on locale?
+		return "{" + std::to_string(imVec4.x) + "," + std::to_string(imVec4.y) + "," + std::to_string(imVec4.z) + "," + std::to_string(imVec4.w) + "}";
+		//DEBUGNOW decimal format depend on locale?
 	}
 
 	//Dumps style except for Colors
@@ -155,6 +157,17 @@ namespace IHHook {
 		ImGuiStyle* style = src ? src : &ImGui::GetStyle();
 		ImVec4* colors = style->Colors;
 		for (int i = 0; i < ImGuiCol_COUNT; i++) {
+			//rlc crashes on push_back of ImGuiCol_COUNT
+			if (ImGuiCol_str[i]=="ImGuiCol_COUNT")
+			{
+				spdlog::debug("GetColors ImGuiCol_str[i]==ImGuiCol_COUNT");
+				break;
+			}
+			if (ImGuiCol_str.capacity()<=i)
+			{
+				spdlog::debug("GetColors ImGuiCol_str.capacity()<=i");
+				break;
+			}
 			savedColors.push_back(ImGuiCol_str[i] + "=" + ImVec4ToLuaStr(colors[i]));
 		}//for ImGuiCol_COUNT
 	}//GetColors
