@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ModEntry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="IHHook" Version="r19" Author="TinManTex" Website="https://www.nexusmods.com/metalgearsolidvtpp/mods/1226/">
+<ModEntry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="IHHook" Version="r20" Author="TinManTex" Website="https://www.nexusmods.com/metalgearsolidvtpp/mods/1226/">
   <MGSVersion Version="1.0.15.3" />
   <SBVersion Version="0.0.0.0" />
   <Description># IHHook
-Version r19 - 2026-04-29 (see github for full changes)  
-Forked by caplag, contributions by ZIP and Half Way Lambda.
-Player appearance override for Snake/Normal fixed (very sloppy, but works)
-Added a few of unknown321's block loading trace functions
-Side ops in custom locations can now be entered from the side ops list (markers still don't work properly)
-Logging fixes
+Version r20 - 2026-04-29 (see github for full changes)  
+Added some but not all manual function patterns
+Fixed GUI style editor save crash
 
 For MGSV version 1.15 (in title screen), 1.0.15.3 in exe  
 For Infinite Heaven r263  
@@ -67,8 +64,7 @@ See IHHHook.h for some comments about the project.
 ## Thanks
 zip for making me smooth out the release process, sorry about taking so long.
 sai for mentioning what he had done with ghidra which helped me get past a few hurdles to start finding MGSVs lua functions.  
-emoose for CityHook which provided a base to start IHHook from.
-Half Way Lambda for imgui contributions in r18</Description>
+emoose for CityHook which provided a base to start IHHook from.</Description>
   <QarEntries />
   <FpkEntries />
   <FileEntries />
