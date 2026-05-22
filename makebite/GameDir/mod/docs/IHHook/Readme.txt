@@ -1,17 +1,14 @@
 # IHHook
-Version r19 - 2026-04-29 (see github for full changes)  
-FoxString hook.  
-Bunch of character, buddy, vehicle change hooks.  
-ihhook_config.lua (next to ihhook/dinput8 dll) - allows some startup settings of ihhook to be set.  
-FNV Hash logging.  
-Ghidra scripts to export addresses, func defs, and a refactor and reduction of required steps to get hooks running.  
+Version r20 - 2026-05-20 (see github for full changes)  
+Added some but not all manual function patterns
+Fixed GUI style editor save crash
 
 For MGSV version 1.15 (in title screen), 1.0.15.3 in exe  
 For Infinite Heaven r263  
 
 Previously bundled with Infinite Heaven, IHHook has been split into a seperate install and nexus page to isolate feedback and issues.
 
-IHHook source: https://github.com/TinManTex/IHHook
+IHHook source: https://github.com/kapuragu/IHHook
 IHHook mod: https://www.nexusmods.com/metalgearsolidvtpp/mods/1226
 Infinite Heaven mod: https://www.nexusmods.com/metalgearsolidvtpp/mods/45
 

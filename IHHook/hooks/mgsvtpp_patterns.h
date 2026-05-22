@@ -29,7 +29,9 @@ namespace IHHook {
 		{"Path_Copy", "53 48 83 ec 20 48 8b 02 48 89 cb 48 89 01 48 8b 0a 48 8d ? ? ? ? ?"},
 		{"GetEmptyPath", "48 83 ec 38 48 c7 44 24 20 fe ff ff ff 8b ? ? ? ? ? a8 01 ? ? 83 c8 01 89 ? ? ? ? ? ? c0 48 89 ? ? ? ? ? 48 8d 0d"},
 		
-		//LoadPlayerPartsFpk
+		{"LoadPlayerPartsFpk", "? 89 4c ? 08 53 ? 83 ec 30 ? c7 44 ? 28 fe ff ff ff ? 89 cb 31 c0 89 44 ? 20 83 fa 04 75 11 ? ba 95 03 6e 5b f2 e6 2a 52"},
+		{"LoadPlayerPartsParts", "? 89 4c ? 08 53 ? 83 ec 30 ? c7 44 ? 28 fe ff ff ff ? 89 cb 31 c0 89 44 ? 20 83 fa 04 75 11 ? ba f6 46 0d 90 2a b8 a9 e0"},
+		{"LoadPlayerCamoFpk", "? 89 4c ? 08 53 ? 83 ec 30 ? c7 44 ? 28 fe ff ff ff ? 89 cb c7 44 ? 20 00 00 00 00 85 d2 74 3d"},
 		//LoadPlayerSnakeFaceFv2
 		
 		//LoadAvatarOgreHornFpk
