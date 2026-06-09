@@ -37,8 +37,8 @@
 
 #include "Util.h"//config 
 
-#include "hooks/mgsvtpp_adresses_1_0_15_3_en.h"
-#include "hooks/mgsvtpp_adresses_1_0_15_3_jp.h"
+#include "hooks/mgsvtpp_adresses_1_0_15_4_en.h"
+#include "hooks/mgsvtpp_adresses_1_0_15_4_jp.h"
 #include "hooks/mgsvtpp_patterns.h"
 
 
@@ -277,11 +277,11 @@ namespace IHHook {
 			//GAMEVERSION
 			//DEBUGNOW TODO: an adresset map too I guess
 			if (lang == "en") {
-				addressSet = mgsvtpp_adresses_1_0_15_3_en;
+				addressSet = mgsvtpp_adresses_1_0_15_4_en;
 			}
 			else {
 				if (lang == "jp") {
-					addressSet = mgsvtpp_adresses_1_0_15_3_jp;
+					addressSet = mgsvtpp_adresses_1_0_15_4_jp;
 				}
 				else {
 					//tex unknown exe lang, should already be handled by isTargetExe
