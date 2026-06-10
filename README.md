@@ -13,8 +13,8 @@ Added a few of unknown321's block loading trace functions
 Side ops in custom locations can now be entered from the side ops list (markers still don't work properly)
 Logging fixes
 
-For MGSV version 1.15 (in title screen), 1.0.15.3 in exe  
-For Infinite Heaven r263  
+For MGSV version 1.15 (in title screen), 1.0.15.4 in exe  
+For Infinite Heaven r265 
 
 Previously bundled with Infinite Heaven, IHHook has been split into a seperate install and nexus page to isolate feedback and issues.
 
@@ -71,3 +71,5 @@ See IHHHook.h for some comments about the project.
 zip for making me smooth out the release process, sorry about taking so long.
 sai for mentioning what he had done with ghidra which helped me get past a few hurdles to start finding MGSVs lua functions.  
 emoose for CityHook which provided a base to start IHHook from.
+Half Way Lambda for imgui contributions in r18
+Yazed0071 for the addresses in 1.0.15.4
