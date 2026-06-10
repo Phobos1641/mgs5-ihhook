@@ -144,7 +144,7 @@ namespace IHHook {
 		{"lua_getfenv", 0x141a110a0},
 		{"lua_settable", 0x141a11e80},
 		{"lua_setfield", 0x141a11d40},
-		{"lua_rawset", 0x144f3afa0},
+		{"lua_rawset", 0x141a11a60},
 		{"lua_rawseti", 0x141a11ae0},
 		{"lua_setmetatable", 0x141a11dc0},
 		{"lua_setfenv", 0x141a11ca0},
