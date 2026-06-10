@@ -1299,7 +1299,7 @@ namespace IHHook {
 		}//LoadPlayerSnakeFaceFpkHook
 
 		ulonglong* LoadPlayerSnakeFaceFv2Hook(ulonglong* fileSlotIndex, uint playerType, uint playerPartsType, uint hornLevel, char playerFaceEquipId) {
-			spdlog::debug("LoadPlayerSnakeFaceFpkHook playerPartsType:{} headNeeded:{}", playerPartsType, character.useHead);
+			spdlog::debug("LoadPlayerSnakeFaceFv2Hook playerPartsType:{} headNeeded:{}", playerPartsType, character.useHead);
 
 			if (playerType != 0) {
 				LoadFile(fileSlotIndex, 0);
