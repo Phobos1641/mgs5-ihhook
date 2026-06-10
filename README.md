@@ -1,5 +1,12 @@
 # IHHook
-Version r19 - 2026-04-29 (see github for full changes)  
+Version r21 - 2026-06-10 (see github for full changes)  
+1.0.15.4 game version addresses by Yazed0071.
+
+Version r20 - 2026-05-20
+Added some but not all manual function patterns
+Fixed GUI style editor save crash
+
+Version r19 - 2026-04-29
 Forked by caplag, contributions by ZIP and Half Way Lambda.
 Player appearance override for Snake/Normal fixed (very sloppy, but works)
 Added a few of unknown321's block loading trace functions

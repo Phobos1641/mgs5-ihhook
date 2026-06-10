@@ -1,7 +1,10 @@
 IHHook changelog 
 - just broad sweep changes, otherwise just look at the github commits.
 
-Version r20 - 2026-05-20 (see github for full changes)
+Version r21 - 2026-06-10 (see github for full changes)  
+1.0.15.4 game version addresses by Yazed0071.
+
+Version r20 - 2026-05-20
 Added some but not all manual function patterns
 Fixed GUI style editor save crash
 
