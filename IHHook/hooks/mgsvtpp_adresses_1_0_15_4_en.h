@@ -64,7 +64,7 @@ namespace IHHook {
 		{"IsHeadNeededForPartsType", 0x140ae8c90},//tpp::gm::player::ResourceTable::DoesNeedFaceFova
 		{"IsHeadNeededForPartsTypeAndAvatar", 0x140ae8ce0},//tpp::gm::player::ResourceTable::DoesNeedFaceFovaForAvatar
 		{"LoadPlayerSnakeFaceFpk", 0x140ae95d0},//tpp::gm::player::ResourceTable::GetFaceFpkPath
-		{"LoadPlayerSnakeFaceFv2", 0x140ae9518},//tpp::gm::player::ResourceTable::GetFaceFilePath
+		{"LoadPlayerSnakeFaceFv2", 0x140ae94c0},//tpp::gm::player::ResourceTable::GetFaceFilePath
 
 		{"LoadAvatarOgreHornFpk", 0x140ae7440},//tpp::gm::player::AvatarTppResourceTable::GetAvatarHoneFpkPath
 		{"LoadAvatarOgreHornFv2", 0x140ae73d0},//tpp::gm::player::AvatarTppResourceTable::GetAvatarHoneFilePath
@@ -144,7 +144,7 @@ namespace IHHook {
 		{"lua_getfenv", 0x141a11160},
 		{"lua_settable", 0x141a11f40},
 		{"lua_setfield", 0x141a11e00},
-		{"lua_rawset", 0x144db28b0},
+		{"lua_rawset", 0x141a11b20},
 		{"lua_rawseti", 0x141a11ba0},
 		{"lua_setmetatable", 0x141a11e80},
 		{"lua_setfenv", 0x141a11d60},
