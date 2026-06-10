@@ -195,12 +195,6 @@
     <ClInclude Include="hooks\mgsvtpp_patterns.h">
       <Filter>Header Files\hooks</Filter>
     </ClInclude>
-    <ClInclude Include="hooks\mgsvtpp_adresses_1_0_15_3_en.h">
-      <Filter>Header Files\hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="hooks\mgsvtpp_adresses_1_0_15_3_jp.h">
-      <Filter>Header Files\hooks</Filter>
-    </ClInclude>
     <ClInclude Include="hooks\mgsvtpp_adresses_1_0_15_4_en.h">
       <Filter>Header Files\hooks</Filter>
     </ClInclude>
@@ -223,6 +217,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hooks_Vehicle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks\mgsvtpp_adresses_1_0_15_3_jp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks\mgsvtpp_adresses_1_0_15_3_en.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
