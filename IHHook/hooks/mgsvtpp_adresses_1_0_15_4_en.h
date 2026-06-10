@@ -119,7 +119,7 @@ namespace IHHook {
 		{"lua_toboolean", 0x141a120c0 },
 		{"lua_tolstring", 0x141a12150 },
 		{"lua_objlen", 0x141a11640 },
-		{"lua_tocfunction", 0x141a120f0,
+		{"lua_tocfunction", 0x141a120f0,},
 		{"lua_touserdata", 0x141a122c0},
 		{"lua_tothread", 0x141a122a0},
 		{"lua_topointer", 0x141a12230},
