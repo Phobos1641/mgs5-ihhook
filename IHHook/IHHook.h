@@ -146,7 +146,7 @@ namespace IHHook {
 		bool OnMessage(HWND wnd, UINT message, WPARAM w_param, LPARAM l_param);
 	private:
 		void SetupLog();
-		std::string GetLangVersion();
+		std::string GetGameVersion();
 
 		bool FrameInitialize();
 		void CreateRenderTarget();

@@ -37,6 +37,8 @@
 
 #include "Util.h"//config 
 
+#include "hooks/mgsvtpp_adresses_1_0_15_3_en.h"
+#include "hooks/mgsvtpp_adresses_1_0_15_3_jp.h"
 #include "hooks/mgsvtpp_adresses_1_0_15_4_en.h"
 #include "hooks/mgsvtpp_adresses_1_0_15_4_jp.h"
 #include "hooks/mgsvtpp_patterns.h"
@@ -215,7 +217,7 @@ namespace IHHook {
 		//can just hope that konami actually keeps updating the exe version properly and not release multiple updates with no exe version change like they have in the past
 		//but version_info.txt should help there too
 
-		std::string lang = GetLangVersion();
+		std::string gameVer = GetGameVersion();
 
 		std::string exeVersionStr = "";
 		int versionDelta = OS::CheckVersionDelta(IHHook::GameVersion, exeVersionStr);
@@ -240,7 +242,12 @@ namespace IHHook {
 			SetCursor(true);//tex DEBUGNOW imgui window currently wont auto dismiss, so give user cursor
 		} 
 		else {
-			if (lang != "en" && lang != "jp" ) {//DEBUGNOW
+			if (gameVer != "Tpp_steam_mst_en_day1820" 
+				&& gameVer != "Tpp_steam_mst_jp_day1820"
+				&& gameVer != "Tpp_steam_mst_en_day3800"
+				&& gameVer != "Tpp_steam_mst_jp_day3800"
+				&& gameVer != "en"
+				&& gameVer != "jp" ) {//rlc back compat 15.3 and 15.4
 				isTargetExe = false;
 
 				errorMessages.push_back("WARNING: Unknown lang version");
@@ -276,14 +283,22 @@ namespace IHHook {
 
 			//GAMEVERSION
 			//DEBUGNOW TODO: an adresset map too I guess
-			if (lang == "en") {
+			if (gameVer == "en"||gameVer=="Tpp_steam_mst_en_day3800") {
 				addressSet = mgsvtpp_adresses_1_0_15_4_en;
 			}
 			else {
-				if (lang == "jp") {
+				if (gameVer == "jp"||gameVer=="Tpp_steam_mst_jp_day3800") {
 					addressSet = mgsvtpp_adresses_1_0_15_4_jp;
 				}
 				else {
+					if (gameVer=="Tpp_steam_mst_en_day1820") {
+						addressSet = mgsvtpp_adresses_1_0_15_3_en;
+					}
+					else {
+						if (gameVer=="Tpp_steam_mst_jp_day1820") {
+							addressSet = mgsvtpp_adresses_1_0_15_3_jp;
+						}
+					}
 					//tex unknown exe lang, should already be handled by isTargetExe
 				}
 			}//if lang
@@ -393,7 +408,8 @@ namespace IHHook {
 		}//d3dHooked
 	}//CreateD3DHook
 
-	std::string IHH::GetLangVersion() {
+	std::string IHH::GetGameVersion() {
+		//rlc reworked to back compat support 1.0.15.3
 		//DEBUGNOW So jp voice version is actually different exe, so cant just rely on exe version info.
 		std::string versionInfoFileName = "version_info.txt";
 		std::ifstream infile(versionInfoFileName);
@@ -405,12 +421,25 @@ namespace IHHook {
 		}
 
 		//REF
+		//1.0.15.3:
 		//Tpp_steam_mst_en_day1820Mgo_patch_0212_1307
 		//Tpp_steam_mst_jp_day1820Mgo_patch_0212_1307
+		//1.0.15.4:
+		//Tpp_steam_mst_en_day3800Mgo_patch_0525_2221
+		//Tpp_steam_mst_jp_day3800Mgo_patch_0525_2221
 		std::string line;
 		std::string lang = "";
+		std::string gameVer = "";
 		while (std::getline(infile, line)) {
 			std::istringstream iss(line);
+			
+			gameVer = line.substr(line.length(), 24);
+			if (gameVer=="Tpp_steam_mst_en_day1820"
+				||gameVer=="Tpp_steam_mst_jp_day1820"
+				||gameVer=="Tpp_steam_mst_en_day3800"
+				||gameVer=="Tpp_steam_mst_jp_day3800")
+				return gameVer;
+			
 
 			if (line.length() < std::string("Tpp_steam_mst_en").length()) {
 				spdlog::warn("Unexpected version string, string shorter than expected");
@@ -435,7 +464,7 @@ namespace IHHook {
 			}
 		}//while infile
 		return lang;
-	}//GetLangVersion
+	}//GetGameVersion
 
 	//D3D11Hook->present
 	//GOTCHA: this is blocking to actual d3d Present, so keep performance in mind
