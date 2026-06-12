@@ -220,8 +220,12 @@ namespace IHHook {
 		std::string gameVer = GetGameVersion();
 
 		std::string exeVersionStr = "";
+		spdlog::debug(L"exeVersionStr 1");
 		int versionDelta = OS::CheckVersionDelta(IHHook::GameVersion, exeVersionStr);
-		if (versionDelta != 0) {
+		spdlog::debug(L"exeVersionStr 2");
+		int versionDelta2 = OS::CheckVersionDelta(IHHook::GameVersion2, exeVersionStr);
+		spdlog::debug(L"exeVersionStr 3");
+		if (versionDelta != 0 && versionDelta2!=0) {
 			isTargetExe = false;
 
 			errorMessages.push_back("ERROR: IHHook->exe version mismatch");
