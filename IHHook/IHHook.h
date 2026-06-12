@@ -69,7 +69,6 @@ namespace IHHook {
 	static const int Version = 21; //SYNC: fileVersion
 	extern int ihVersion;
 	static const DWORD GameVersion[4] = { 1, 0, 15, 4 }; //tex: version checking game exe
-	static const DWORD GameVersion2[4] = { 1, 0, 15, 3 };
 	//static const std::wstring exeName = L"mgsvtpp.exe"; //tex use GetModuleFileName instead
 
 	static const std::wstring hookLogName = L"ihhook_log.txt";

@@ -220,12 +220,8 @@ namespace IHHook {
 		std::string gameVer = GetGameVersion();
 
 		std::string exeVersionStr = "";
-		spdlog::debug(L"exeVersionStr 1");
 		int versionDelta = OS::CheckVersionDelta(IHHook::GameVersion, exeVersionStr);
-		spdlog::debug(L"exeVersionStr 2");
-		int versionDelta2 = OS::CheckVersionDelta(IHHook::GameVersion2, exeVersionStr);
-		spdlog::debug(L"exeVersionStr 3");
-		if (versionDelta != 0 && versionDelta2!=0) {
+		if (gameVer=="" && versionDelta != 0) {
 			isTargetExe = false;
 
 			errorMessages.push_back("ERROR: IHHook->exe version mismatch");
@@ -437,7 +433,8 @@ namespace IHHook {
 		while (std::getline(infile, line)) {
 			std::istringstream iss(line);
 			
-			gameVer = line.substr(line.length(), 24);
+			gameVer = line.substr(0, 24);
+			spdlog::debug("Found gameVer: {}", gameVer);
 			if (gameVer=="Tpp_steam_mst_en_day1820"
 				||gameVer=="Tpp_steam_mst_jp_day1820"
 				||gameVer=="Tpp_steam_mst_en_day3800"
