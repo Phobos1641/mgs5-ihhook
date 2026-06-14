@@ -13,8 +13,8 @@ namespace IHHook {
 		//{"BlockHeapAlloc", 0x1400dcb50},
 		//{"BlockHeapFree", 0x1400dcbc0},
 		{"FoxBlockProcess", 0x14006e4e0},//double fox::Block::Process(BlockMemory *blockMemory,undefined8 param_2,longlong *param_3)
-		//{"FoxBlockUnload", 0x143154a00},
-		//{"FoxBlockReload", 0x1431533b0},
+		//{"FoxBlockUnload", 0x14006f990},
+		//{"FoxBlockReload", 0x14006f320},
 		//{"FoxBlockActivate", 0x14006cb20},
 		//{"FoxBlockDeactivate", 0x14314a000},
 		//{"FoxGenerateUniqueName", 0x1400e0210},
@@ -73,9 +73,9 @@ namespace IHHook {
 		{"LoadBuddyQuietWeaponFpk", 0x140a465c0},//tpp::gm::buddy::impl::Buddy2BlockControllerImpl::GetBuddyQuietWeaponFileFromBuddyBlock
 		{"LoadBuddyDogCommonFPK", 0x140a46d4a},//part of 140a46360 tpp::gm::buddy::impl::Buddy2BlockControllerImpl::GetPathAtSub
 		{"LoadBuddyHorseCommonFPK", 0x140a46d53},//ditto
-		{"LoadBuddyWalkerGearArmFpk", 0x143897be0},//tpp::gm::buddy::impl::Buddy2BlockControllerImpl::GetBuddyGearArmFile
-		{"LoadBuddyWalkerGearHeadFpk", 0x1464d44a0},//tpp::gm::buddy::impl::Buddy2BlockControllerImpl::GetBuddyGearHeadFile
-		{"LoadBuddyWalkerGearWeaponFpk", 0x1464d47f0},//tpp::gm::buddy::impl::Buddy2BlockControllerImpl::GetBuddyGearMainWeaponFile
+		{"LoadBuddyWalkerGearArmFpk", 0x140a46170},//tpp::gm::buddy::impl::Buddy2BlockControllerImpl::GetBuddyGearArmFile
+		{"LoadBuddyWalkerGearHeadFpk", 0x140a462e0},//tpp::gm::buddy::impl::Buddy2BlockControllerImpl::GetBuddyGearHeadFile
+		{"LoadBuddyWalkerGearWeaponFpk", 0x140a46390},//tpp::gm::buddy::impl::Buddy2BlockControllerImpl::GetBuddyGearMainWeaponFile
 		//{"LoadDefaultFpksFunc", 0x143151e80},//int * fox::Block::Load(void *thisPtr,int *errorCode,ulonglong *pathID,uint param_4)
 
 		{"PreparePlayerVehicleInSortie", 0x140b3abf0},//tpp::gm::vehicle::ReliefBlockController::LoadToExhibit
@@ -112,13 +112,13 @@ namespace IHHook {
 		{"lua_type", 0x141a12300},
 		//{"lua_typename", USING_CODE},
 		//{"lua_equal", NOT_FOUND},//tex: lua implementation goes a bit deeper than I'm happy with to use at the moment. No calls in lua distro, so may be hard to find, or have been culled by compilation
-		{"lua_rawequal", 0x141a11a50 },
-		{"lua_lessthan", 0x141a114b0 },
-		{"lua_tonumber", 0x141a121f0	},
-		{"lua_tointeger", 0x141a12120 },
-		{"lua_toboolean", 0x141a120c0 },
-		{"lua_tolstring", 0x141a12150 },
-		{"lua_objlen", 0x141a11640 },
+		{"lua_rawequal", 0x141a11a50},
+		{"lua_lessthan", 0x141a114b0},
+		{"lua_tonumber", 0x141a121f0},
+		{"lua_tointeger", 0x141a12120},
+		{"lua_toboolean", 0x141a120c0},
+		{"lua_tolstring", 0x141a12150},
+		{"lua_objlen", 0x141a11640},
 		{"lua_tocfunction", 0x141a120f0},
 		{"lua_touserdata", 0x141a122c0},
 		{"lua_tothread", 0x141a122a0},
