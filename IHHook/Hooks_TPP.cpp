@@ -174,8 +174,8 @@ namespace IHHook {
 			//	bool bleh = true;
 			//}
 
-			if (addressSet["StrCode64"] == NULL) {
-				spdlog::warn("addr fail: addressSet[\"StrCode64\"] == NULL");
+			if (addressSet["GetStrCodeWithLength"] == NULL) {
+				spdlog::warn("addr fail: addressSet[\"GetStrCodeWithLength\"] == NULL");
 			}
 			else {					
 				//DEBUGNOW TEST
